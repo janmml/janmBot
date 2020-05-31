@@ -1,0 +1,11 @@
+{
+	"usage": {
+		"move": "Usage for command \">mv\"/\">move\": \n>mv [destinationChannel] or \n>mv [originChannel] > [destinationChannel]. \nBoth the destination and origin channels are Voice Channel names (make sure to use the full name of the channels). \nFor the first version, with only the destination channel, you must be in a voice channel. Your current channel will become the origin channel, from which people will be moved.",
+		"delete": "Usage for command \">rm\"/\">remove\"/\">del\"/\">delete\": \n>rm [numberOfMessages]. \nThe number of messages to be deleted has to be an integer less than 100. \nThis will delete that many messages (newest first) wherever it was called. \nCaller must have \"Manage Messages\" permission."
+	},
+
+	"other": {
+		"dmreply": "This Bot is made to currently only work on servers, please do not message this Bot directly. If you meant to message the authors of this Bot, please contact them on https://janm.ml/discord or https://janm.ml/contact.",
+		"test": "Test123, hello!"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"name": "janmBot",
+	"version": "1.0.0",
+	"description": "janm.ml Discord Bot",
+	"main": "bot.js",
+	"author": "janm.ml",
+	"dependencies": {
+		"discord.js": "^12.2.0"
+	}
+}
