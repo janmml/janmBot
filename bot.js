@@ -26,17 +26,29 @@ bot.on('message', message => {
 		message.channel.send(text.other.test)
 	} else if (message.content.startsWith(">mv") || message.content.startsWith(">move")) {
 		// Move command:
-		moveCmd(message)
+		try {
+			moveCmd(message)
+		} catch (error) {
+			message.channel.send(text.fail.move)
+		}
 	} else if (message.content.startsWith(">rm") || message.content.startsWith(">remove") || message.content.startsWith(">del") || message.content.startsWith(">delete")) {
 		// Delete command:
-		// Get amount of messages to be deleted
-		const cmd = [message.content.split(" ")[0], message.content.substring(message.content.split(" ")[0].length)]
-		const msgNum = cmd[1].trim
-		//TODO: this
-		
-		// Delete messages
+		try {
+			deleteCmd(message)
+		} catch (error) {
+			message.channel.send(text.fail.delete)
+		}
 	}
 });
+
+function deleteCmd(message) {
+	// Get amount of messages to be deleted
+	const cmd = [message.content.split(" ")[0], message.content.substring(message.content.split(" ")[0].length)]
+	const msgNum = cmd[1].trim()
+	
+	// Delete messages
+	message.channel.bulkDelete(parseInt(msgNum))
+}
 
 function moveCmd(message) {
 	// Get channels for moving
