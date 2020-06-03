@@ -4,6 +4,11 @@
 		"delete": "Usage for command \">rm\"/\">remove\"/\">del\"/\">delete\": \n>rm [numberOfMessages]. \nThe number of messages to be deleted has to be an integer less than 100. \nThis will delete that many messages (newest first) wherever it was called. \nCaller must have \"Manage Messages\" permission."
 	},
 
+	"fail": {
+		"move": "Move command failed. If this keeps happening, please contact my developer for a fix.",
+		"delete": "Delete command failed. If this keeps happening, please contact my developer for a fix."
+	},
+
 	"other": {
 		"dmreply": "This Bot is made to currently only work on servers, please do not message this Bot directly. If you meant to message the authors of this Bot, please contact them on https://janm.ml/discord or https://janm.ml/contact.",
 		"test": "Test123, hello!"
