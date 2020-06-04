@@ -42,6 +42,14 @@ bot.on('message', message => {
 });
 
 function deleteCmd(message) {
+	/*
+	* Deletes a number of messages (number is first part of message text after a " ")
+	* 
+	* message - type Message, must be from a guild (message.member is a GuildMember)
+	* 
+	* returns - false on failure, true on success
+	*/
+	
 	// Get amount of messages to be deleted
 	const cmd = [message.content.split(" ")[0], message.content.substring(message.content.split(" ")[0].length)]
 	const msgNum = parseInt(cmd[1])
@@ -49,22 +57,23 @@ function deleteCmd(message) {
 	// Check command
 	if (isNaN(msgNum)) {
 		message.channel.send(text.usage.delete)
-		return
+		return false
 	}
 
 	if (msgNum < 1 || msgNum > 99) {
 		message.channel.send(text.usage.delete)
-		return
+		return false
 	}
 
 	// Check permissions
 	if (!message.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
 		message.channel.send(text.fail.userPermission)
-		return
+		return false
 	}
 	
 	// Delete messages
 	message.channel.bulkDelete(msgNum + 1) // + 1 to delete the caller's message, then after that msgNum messages
+	return true
 }
 
 function moveCmd(message) {
