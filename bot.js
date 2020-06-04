@@ -66,7 +66,7 @@ function deleteCmd(message) {
 	}
 
 	// Check permissions
-	if (!message.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+	if (!message.member.permissiosIn(message.channel).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
 		message.channel.send(text.fail.userPermission)
 		return false
 	}
