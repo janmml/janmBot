@@ -1,13 +1,12 @@
 {
 	"usage": {
-		"move": "Usage for command \">mv\"/\">move\": \n>mv [destinationChannel] or \n>mv [originChannel] > [destinationChannel]. \nBoth the destination and origin channels are Voice Channel names (make sure to use the full name of the channels). \nFor the first version, with only the destination channel, you must be in a voice channel. Your current channel will become the origin channel, from which people will be moved.",
+		"move": "Usage for command \">mv\"/\">move\": \n>mv @[userInOriginChannel] or \n>mv @[userInOriginChannel] @[userInDestinationChannel]. \nThe tagged users can be any user in that specific channel. Voice Channel names can NOT be used. \nFor the first version, with only the destination channel user, you must be in a voice channel. All users in the channel with the tagged user will be moved to the caller. \nCaller must have the Move Members permission (in both channels).",
 		"delete": "Usage for command \">rm\"/\">remove\"/\">del\"/\">delete\": \n>rm [numberOfMessages]. \nThe number of messages to be deleted has to be an integer less than 100. \nThis will delete that many messages (newest first) wherever it was called. The message that called this command is not included in the number of messages. \nCaller must have \"Manage Messages\" permission."
 	},
 
 	"fail": {
 		"userPermission": "You do not have the required permission to user this command. If you believe this is an error, please contact your server administrator.",
 		"move": "Move command failed. If this keeps happening, please contact my developer for a fix.",
-		"duplicateVoiceChannels": "Command failed because ${duplicateChannelName} is the name of more than one voice channel. Please contact your server administrator, or use the channel's ID (you can also try CATEGORY.CHANNEL).",
 		"delete": "Delete command failed. If this keeps happening, please contact my developer for a fix."
 	},
 
