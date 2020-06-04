@@ -6,7 +6,6 @@
 
 	"fail": {
 		"userPermission": "You do not have the required permission to user this command. If you believe this is an error, please contact your server administrator.",
-		"botPermission": "This Bot has not been given the required permission to user this command. If you believe this is an error, please contact your server administrator.",
 		"move": "Move command failed. If this keeps happening, please contact my developer for a fix.",
 		"delete": "Delete command failed. If this keeps happening, please contact my developer for a fix."
 	},
