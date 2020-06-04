@@ -44,10 +44,27 @@ bot.on('message', message => {
 function deleteCmd(message) {
 	// Get amount of messages to be deleted
 	const cmd = [message.content.split(" ")[0], message.content.substring(message.content.split(" ")[0].length)]
-	const msgNum = cmd[1].trim()
+	const msgNum = parseInt(cmd[1])
+
+	// Check command
+	if (isNaN(msgNum)) {
+		message.channel.send(text.usage.delete)
+		return
+	}
+
+	if (msgNum < 1 || msgNum > 99) {
+		message.channel.send(text.usage.delete)
+		return
+	}
+
+	// Check permissions
+	if (!message.member.hasPermission(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+		message.channel.send(text.fail.userPermission)
+		return
+	}
 	
 	// Delete messages
-	message.channel.bulkDelete(parseInt(msgNum))
+	message.channel.bulkDelete(msgNum + 1) // + 1 to delete the caller's message, then after that msgNum messages
 }
 
 function moveCmd(message) {
