@@ -6,7 +6,7 @@
 
 	"fail": {
 		"userPermission": "You do not have the required permission to user this command. If you believe this is an error, please contact your server administrator.",
-		"userNotInVoiceChannel": "The user {user} must be in a voice channel for this command to work.",
+		"userNotInVoiceChannel": "{user} must be in a voice channel for this command to work.",
 		"move": "Move command failed. If this keeps happening, please contact my developer for a fix.",
 		"delete": "Delete command failed. If this keeps happening, please contact my developer for a fix."
 	},
