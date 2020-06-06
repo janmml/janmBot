@@ -8,7 +8,7 @@ bot.on("ready", () => {
 	console.log("Logged in and ready.");
 });
 
-bot.on('message', message => {
+bot.on("message", message => {
 	if (message.author.bot) {
 		// Disregard messages from bots (including itself)
 		return
