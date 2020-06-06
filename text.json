@@ -12,7 +12,7 @@
 	},
 
 	"other": {
-		"dmreply": "This Bot is made to currently only work on servers, please do not message this Bot directly. If you meant to message the authors of this Bot, please contact them on https://janm.ml/discord or https://janm.ml/contact.",
+		"dmreply": "This Bot is made to currently only work on servers. If you meant to message my, just keep typing here, these messages get forwarded to my devs. You can also contact them on https://janm.ml/discord or https://janm.ml/contact.",
 		"test": "Test123, hello!"
 	}
 }

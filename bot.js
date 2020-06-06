@@ -17,6 +17,12 @@ bot.on('message', message => {
 	if (!message.guild) {
 		// Reply with a standard bit of info about dev contact when not on a server
 		message.reply(text.other.dmreply)
+
+		// And forward the message to the dev
+		client.fetchUser(config.devUserID).then((user) => {
+			user.send(message.author + " sent \"" + message.cleanContent + "\" to me.");
+		});
+
 		return
 	};
 	
