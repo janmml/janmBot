@@ -19,7 +19,7 @@ bot.on("message", message => {
 		message.reply(text.other.dmreply)
 
 		// And forward the message to the dev
-		client.fetchUser(config.devUserID).then((user) => {
+		bot.fetchUser(config.devUserID).then((user) => {
 			user.send(message.author + " sent \"" + message.cleanContent + "\" to me.");
 		});
 
