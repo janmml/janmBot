@@ -2,7 +2,7 @@ const config = require("./config.json")
 const text = require("./text.json")
 const Discord = require("discord.js")
 
-let bot = new Discord.Client()
+const bot = new Discord.Client()
 
 bot.on("ready", () => {
 	console.log("Logged in and ready.");
@@ -19,9 +19,7 @@ bot.on("message", message => {
 		message.reply(text.other.dmreply)
 
 		// And forward the message to the dev
-		bot.fetchUser(config.devUserID).then((user) => {
-			user.send(message.author + " sent \"" + message.cleanContent + "\" to me.");
-		});
+		bot.users.resolve(config.devUserID).send(message.author + " sent \"" + message.cleanContent + "\" to me.")
 
 		return
 	};
