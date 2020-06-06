@@ -1,3 +1,5 @@
+"use strict"
+
 const config = require("./config.json")
 const text = require("./text.json")
 const Discord = require("discord.js")
@@ -28,6 +30,17 @@ bot.on("message", message => {
 	if (message.content.startsWith(">test")) {
 		// Test command:
 		message.channel.send(text.other.test)
+	} else if (message.content.startsWith(">help")) {
+		// Help command:
+		if (message.cleanContent === ">help all") {
+			let helpMessage = ""
+			for (let usageText of text.usage) {
+				helpMessage = helpMessage + usageText + "\n\n"
+			}
+			message.channel.send(helpMessage)
+		} else {
+			message.channel.send(text.other.help)
+		}
 	} else if (message.content.startsWith(">mv") || message.content.startsWith(">move")) {
 		// Move command:
 		try {
