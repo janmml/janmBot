@@ -21,6 +21,7 @@
 
 	"other": {
 		"dmreply": "This Bot is made to currently only work on servers. If you meant to message my, just keep typing here, these messages get forwarded to my devs. You can also contact them on https://janm.ml/discord or https://janm.ml/contact.",
+		"dmforward": "{user} sent \"{message}\" to me.",
 		"test": "Test123, hello!",
 		"help": "To see all my commands and their usage, type \">help all\"."
 	}
