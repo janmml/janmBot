@@ -137,4 +137,98 @@ function moveCmd(message) {
 	// Reply to original message
 }
 
+function getGuildChannels(guild, type, name) {
+	/*
+	* Get a guild channel of a certain type by name, id, or category and name.
+	* 
+	* guild - Discord.Guild - The Discord.Guild object, in which to search for the channels. REQUIRED
+	* type - string - The channel type ("VoiceChannel"/"voice", "TextChannel"/"text", "CategoryChannel"/"category", "NewsChannel"/"news", or "StoreChannel"/"store"). OPTIONAL
+	* name - string - The channel name, category.name, or id. OPTIONAL
+	* 
+	* returns - An array of all channels in [guild], which match the [name] and [type]. If [name] and/or [type] are left out or undefined, that specific parameter will be ignored.
+	* The channels are returned in order of their position in the GUI (".rawPosition"). If no channels are found, it returns an empty array. On failure, returns undefined.
+	*/
+
+	const guildChannels = Array.from(guild.channels.cache)
+	let channelType
+	let channels = []
+
+	// Set the correct type to look for
+	switch (type) {
+		case "voice":
+		case "VoiceChannel":
+			channelType = "voice"
+			break
+
+		case "text":
+		case "TextChannel":
+			channelType = "text"
+			break
+
+		case "category":
+		case "CategoryChannel":
+			channelType = "category"
+			break
+
+		case "news":
+		case "NewsChannel":
+			channelType = "news"
+			break
+
+		case "store":
+		case "StoreChannel":
+			channelType = "store"
+			break
+	}
+
+	// Format the name
+	let channelName, channelNameType
+	if (name !== undefined && typeof(name) === "string") {
+		// Check which name it's using
+		if (/.+\..+/giu.test(name)) {
+			// category.name
+			channelNameType = "category.name"
+			channelName = [undefined, undefined]
+			channelName[0] = name.match(/.+\./giu)[0]
+			channelName[0] = channelName[0].substring(0, channelName[0].length - 1).trim()
+			channelName[1] = name.match(/\..+/giu)[0]
+			channelName[1] = channelName[1].substring(1).trim()
+
+		} else if (!isNaN(name) && /\d+[^A-Z\s]/giu.test(name)) {
+			// id/snowflake
+			// If the channel is given by ID, it must be universally unique, so we just return that (inside an array for consistency)
+			return [guild.channels.resolve(name)]
+
+		} else {
+			// probably name
+			channelNameType = "name"
+			channelName = name.trim()
+
+		}
+	}
+
+	// Put all the channel objects into an array
+	for (let channel of guildChannels) {
+		// But only if the type ...
+		if (channel[1].type === channelType || channelType === undefined) {
+			// ... and name match
+			if (channelNameType === undefined) {
+				channels.push(channel[1])
+			} else if (channelNameType === "name") {
+				if (channel[1].name.trim() === channelName) {
+					channels.push(channel[1])
+				}
+			} else if (channelNameType === "category.name") {
+				if (channel[1].parent.name.trim() === channelName[0] && channel[1].name.trim() === channelName[1]) {
+					channels.push(channel[1])
+				}
+			}
+		}
+	}
+
+	channels.sort((a, b) => (a.rawPosition - b.rawPosition))
+
+	return channels
+}
+
 bot.login(config.token)
