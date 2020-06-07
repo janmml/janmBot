@@ -10,6 +10,7 @@
 		"userNotInVoiceChannel": "{user} must be in a voice channel for this command to work.",
 		"duplicateVoiceChannels": "Command failed because {channel} is the name of more than one voice channel. Please contact your server administrator, or use the channel's ID (you can also try CATEGORY.CHANNEL).",
 		"channelNotFound": "Could not find channel {channel}. Please check your spelling, and if the issue continues, contact my developers.",
+		"voiceChannelFull": "The voice channel {channel} is full (or too small) for this command to work. If the channel is actually big enough, please contact my developers.",
 		"move": "Move command failed. If this keeps happening, please contact my developer for a fix.",
 		"delete": "Delete command failed. If this keeps happening, please contact my developer for a fix."
 	},
