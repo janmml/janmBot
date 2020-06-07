@@ -7,8 +7,10 @@ const Discord = require("discord.js")
 const bot = new Discord.Client()
 
 bot.on("ready", () => {
-	console.log("Logged in and ready.");
-});
+	console.log("Logged in and ready.")
+	setInterval(everyMinute, 60000)
+
+})
 
 bot.on("message", message => {
 	if (message.author.bot) {
@@ -21,56 +23,83 @@ bot.on("message", message => {
 		message.reply(text.other.dmreply)
 
 		// And forward the message to the dev
-		bot.users.resolve(config.devUserID).send(message.author.toString() + " sent \"" + message.cleanContent + "\" to me.")
+		bot.users.resolve(config.devUserID).send(text.other.dmforward
+			.replace("{user}", message.author.toString())
+			.replace("{message}", message.cleanContent))
 
 		return
-	};
+	}
 	
 	// Commands:
 	if (message.content.startsWith(">test")) {
 		// Test command:
 		message.channel.send(text.other.test)
+
 	} else if (message.content.startsWith(">help")) {
 		// Help command:
 		if (message.cleanContent === ">help all") {
 			let helpMessage = ""
+
 			for (let command in text.usage) {
 				helpMessage = helpMessage + text.usage[command] + "\n\n"
+
 			}
+
 			message.channel.send(helpMessage)
+
 		} else {
 			message.channel.send(text.other.help)
+
 		}
-	} else if (message.content.startsWith(">mv") || message.content.startsWith(">move")) {
+	
+	} else if (
+		message.content.startsWith(">mv") ||
+		message.content.startsWith(">move")
+	) {
 		// Move command:
 		try {
 			moveCmd(message)
+
 		} catch (error) {
 			message.channel.send(text.fail.move)
+
 		}
-	} else if (message.content.startsWith(">rm") || message.content.startsWith(">remove") || message.content.startsWith(">del") || message.content.startsWith(">delete")) {
+	
+	} else if (
+		message.content.startsWith(">rm") ||
+		message.content.startsWith(">remove") ||
+		message.content.startsWith(">del") ||
+		message.content.startsWith(">delete")
+	) {
 		// Delete command:
 		try {
 			deleteCmd(message)
+
 		} catch (error) {
 			message.channel.send(text.fail.delete)
+
 		}
 	}
-});
+})
+
 
 function everyMinute() {
 	/*
-	* Runs every minute while the bot is online. Useful for stuff like "Now playing:" or whatever.
+	* Runs every minute while the bot is online.
+	* Useful for stuff like "Now playing:" or whatever.
 	* 
 	* no arguments
 	* 
 	* returns nothing
 	*/
+
 }
+
 
 function deleteCmd(message) {
 	/*
-	* Deletes a number of messages (number is first part of message text after a " ")
+	* Deletes a number of messages
+	* (number is first part of message text after a " ")
 	* 
 	* message - type Message, must be from a guild
 	* 
@@ -78,7 +107,11 @@ function deleteCmd(message) {
 	*/
 
 	// Get amount of messages to be deleted
-	const cmd = [message.content.split(" ")[0], message.content.substring(message.content.split(" ")[0].length)]
+	const cmd = [
+		message.content.split(" ")[0],
+		message.content.substring(message.content.split(" ")[0].length)
+	]
+
 	const msgNum = parseInt(cmd[1])
 
 	// Check command
@@ -93,19 +126,25 @@ function deleteCmd(message) {
 	}
 
 	// Check permissions
-	if (!message.member.permissionsIn(message.channel).has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+	if (
+		!message.member.permissionsIn(message.channel)
+			.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)
+	) {
 		message.channel.send(text.fail.userPermission)
 		return false
 	}
 	
 	// Delete messages
-	message.channel.bulkDelete(msgNum + 1) // + 1 to delete the caller's message, then after that msgNum messages
+	// + 1 to delete the caller's message, then after that msgNum messages
+	message.channel.bulkDelete(msgNum + 1)
+
 	return true
 }
 
 function moveCmd(message) {
 	/*
-	* Moves guild members from one channel to another. Channels are specified in the message text.
+	* Moves guild members from one channel to another.
+	* Channels are specified in the message text.
 	* 
 	* message - type Message, must be from a guild
 	* 
@@ -113,7 +152,11 @@ function moveCmd(message) {
 	*/
 
 	// Get channels for moving
-	const cmd = [message.content.split(" ")[0], message.content.substring(message.content.split(" ")[0].length)]
+	const cmd = [
+		message.content.split(" ")[0],
+		message.content.substring(message.content.split(" ")[0].length)
+	]
+
 	const channels = cmd[1].split(">")
 	let fromChannel, toChannel, channelNames
 
@@ -123,16 +166,23 @@ function moveCmd(message) {
 
 		if (fromChannel[0] === null) {
 			// If the member is not in a voice channel
-			message.channel.send(text.fail.userNotInVoiceChannel.replace("{user}", message.member))
+			message.channel.send(text.fail.userNotInVoiceChannel
+				.replace("{user}", message.member))
+
 			return false
 		}
 
-		channelNames = [message.member.voice.channel.name, channels[0]]
+		channelNames = [
+			message.member.voice.channel.name,
+			channels[0]
+		]
+
 	} else if (channels.length == 2) {
 		fromChannel = getGuildChannels(message.guild, "voice", channels[0])
 		toChannel = getGuildChannels(message.guild, "voice", channels[1])
 		
 		channelNames = [channels[0], channels[1]]
+
 	} else {
 		message.channel.send(text.usage.move)
 		return false
@@ -140,14 +190,19 @@ function moveCmd(message) {
 
 	// Verify channels
 	if (fromChannel.length === 0) {
-		message.channel.send(text.fail.channelNotFound.replace("{channel}", channelNames[0]))
+		message.channel.send(text.fail.channelNotFound
+			.replace("{channel}", channelNames[0]))
+
 		return false
 	} else if (toChannel.length === 0) {
-		message.channel.send(text.fail.channelNotFound.replace("{channel}", channelNames[1]))
+		message.channel.send(text.fail.channelNotFound
+			.replace("{channel}", channelNames[1]))
+
 		return false
 	} else {
 		toChannel = toChannel[0]
 		fromChannel = fromChannel[0]
+
 	}
 
 	if (fromChannel == undefined || toChannel == undefined) {
@@ -159,27 +214,44 @@ function moveCmd(message) {
 	const membersToMove = Array.from(fromChannel.members)
 
 	// Verify caller can move members (i am so sorry for the following code)
-	if (!(fromChannel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MOVE_MEMBERS) &&
-	toChannel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MOVE_MEMBERS) &&
-	fromChannel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.CONNECT) &&
-	toChannel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.CONNECT))) {
+	if (!(
+		fromChannel.permissionsFor(message.member)
+			.has(Discord.Permissions.FLAGS.MOVE_MEMBERS) &&
+		toChannel.permissionsFor(message.member)
+			.has(Discord.Permissions.FLAGS.MOVE_MEMBERS) &&
+		fromChannel.permissionsFor(message.member)
+			.has(Discord.Permissions.FLAGS.CONNECT) &&
+		toChannel.permissionsFor(message.member)
+			.has(Discord.Permissions.FLAGS.CONNECT)
+	)) {
 		message.channel.send(text.fail.userPermission)
 		return false
 	}
 
 	// Verify members will fit in toChannel
-	if (toChannel.userLimit !== 0 && membersToMove.length > (toChannel.userLimit - Array.from(toChannel.members).length)) {
-		message.channel.send(text.fail.voiceChannelFull.replace("{channel}", "toChannel"))
+	const spaceInToChannel = Array.from(toChannel.members).length
+	if (
+		toChannel.userLimit !== 0 &&
+		membersToMove.length > (toChannel.userLimit - spaceInToChannel)
+	) {
+		message.channel.send(text.fail.voiceChannelFull
+			.replace("{channel}", "toChannel"))
+
 		return false
 	}
 
 	// Move members to toChannel
 	for (let member of membersToMove) {
 		member[1].voice.setChannel(toChannel, "Moved by the >move command.")
+
 	}
 
 	// Reply to original message
-	message.channel.send(`Moved ${membersToMove.length} people from ${fromChannel} to ${toChannel}.`)
+	message.channel.send(text.success.move
+		.replace("{amountOfMembers}", membersToMove.length)
+		.replace("{fromChannel}", fromChannel)
+		.replace("{toChannel}", toChannel))
+
 	return true
 }
 
@@ -187,12 +259,23 @@ function getGuildChannels(guild, type, name) {
 	/*
 	* Get a guild channel of a certain type by name, id, or category and name.
 	* 
-	* guild - Discord.Guild - The Discord.Guild object, in which to search for the channels. REQUIRED
-	* type - string - The channel type ("VoiceChannel"/"voice", "TextChannel"/"text", "CategoryChannel"/"category", "NewsChannel"/"news", or "StoreChannel"/"store"). OPTIONAL
+	* guild - Discord.Guild - The Discord.Guild object, in which to search
+	* for the channels. REQUIRED
+	*
+	* type - string - The channel type ("VoiceChannel"/"voice",
+	* "TextChannel"/"text", "CategoryChannel"/"category", "NewsChannel"/"news",
+	* or "StoreChannel"/"store"). OPTIONAL
+	*
 	* name - string - The channel name, category.name, or id. OPTIONAL
 	* 
-	* returns - An array of all channels in [guild], which match the [name] and [type]. If [name] and/or [type] are left out or undefined, that specific parameter will be ignored.
-	* The channels are returned in order of their position in the GUI (".rawPosition"). If no channels are found, it returns an empty array. On failure, returns undefined.
+	* returns - An array of all channels in [guild], which match the
+	* [name] and [type]. If [name] and/or [type] are left out or undefined,
+	* that specific parameter will be ignored.
+	*
+	* The channels are returned in order of their position in the GUI
+	* (".rawPosition"). If no channels are found, it returns an empty array.
+	*
+	* On failure, returns undefined.
 	*/
 
 	const guildChannels = Array.from(guild.channels.cache)
@@ -225,26 +308,31 @@ function getGuildChannels(guild, type, name) {
 		case "StoreChannel":
 			channelType = "store"
 			break
+		
 	}
 
 	// Format the name
 	let channelName, channelNameType
+
 	if (name !== undefined && typeof(name) === "string") {
 		// Check which name it's using
 		if (/.+\..+/giu.test(name)) {
 			// category.name
 			channelNameType = "category.name"
 			channelName = [undefined, undefined]
+
 			channelName[0] = name.match(/.+\./giu)[0]
-			channelName[0] = channelName[0].substring(0, channelName[0].length - 1).trim()
+			channelName[0] = channelName[0]
+				.substring(0, channelName[0].length - 1).trim()
+
 			channelName[1] = name.match(/\..+/giu)[0]
 			channelName[1] = channelName[1].substring(1).trim()
 
 		} else if (!isNaN(name) && /\d+[^A-Z\s]/giu.test(name)) {
 			// id/snowflake
-			// If the channel is given by ID, it must be universally unique, so we just return that (inside an array for consistency)
+			// If the channel is given by ID, it must be universally unique,
+			// so we just return that (inside an array for consistency)
 			return [guild.channels.resolve(name)]
-
 		} else {
 			// probably name
 			channelNameType = "name"
@@ -260,13 +348,20 @@ function getGuildChannels(guild, type, name) {
 			// ... and name match
 			if (channelNameType === undefined) {
 				channels.push(channel[1])
+
 			} else if (channelNameType === "name") {
 				if (channel[1].name.trim() === channelName) {
 					channels.push(channel[1])
+
 				}
+
 			} else if (channelNameType === "category.name") {
-				if (channel[1].parent.name.trim() === channelName[0] && channel[1].name.trim() === channelName[1]) {
+				if (
+					channel[1].parent.name.trim() === channelName[0] &&
+					channel[1].name.trim() === channelName[1]
+				) {
 					channels.push(channel[1])
+
 				}
 			}
 		}
