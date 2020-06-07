@@ -1,6 +1,6 @@
 {
 	"usage": {
-		"test": "Usage for command \">test\": >test. This command simply send a message back in the same channel as the test command. Useful for debugging and not much else.",
+		"test": "Usage for command \">test\": \n>test. \nThis command simply send a message back in the same channel as the test command. Useful for debugging and not much else.",
 		"move": "Usage for command \">mv\"/\">move\": \n>mv [destinationChannel] or \n>mv [originChannel] > [destinationChannel]. \nBoth the destination and origin channels are Voice Channel names (make sure to use the full name of the channels). \nFor the first version, with only the destination channel, you must be in a voice channel. Your current channel will become the origin channel, from which people will be moved.",
 		"delete": "Usage for command \">rm\"/\">remove\"/\">del\"/\">delete\": \n>rm [numberOfMessages]. \nThe number of messages to be deleted has to be an integer less than 100. \nThis will delete that many messages (newest first) wherever it was called. The message that called this command is not included in the number of messages. \nCaller must have \"Manage Messages\" permission."
 	},
