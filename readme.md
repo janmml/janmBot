@@ -19,4 +19,4 @@ The bot itself is currently limited to just [our Discord server](https://janm.ml
 
 ## License
 
-janmBot is licensed under the [European Union Public License 1.1](http://ec.europa.eu/idabc/eupl.html) or later.
+janmBot is licensed under the [European Union Public License 1.2](http://ec.europa.eu/idabc/eupl.html) or later.
