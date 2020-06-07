@@ -105,36 +105,72 @@ function moveCmd(message) {
 	// Get channels for moving
 	const cmd = [message.content.split(" ")[0], message.content.substring(message.content.split(" ")[0].length)]
 	const channels = cmd[1].split(">")
+	let fromChannel, toChannel, channelNames
+
 	if (channels.length == 1) {
-		const fromChannel = message.member.voice.channel // Caller's channel
-		const toChannel = message.guild.channels.cache.find(channel => channel.name === channels[0].trim())
+		fromChannel = [message.member.voice.channel] // Caller's channel
+		toChannel = getGuildChannels(message.guild, "voice", channels[0])
+
+		if (fromChannel[0] === null) {
+			// If the member is not in a voice channel
+			message.channel.send(text.fail.userNotInVoiceChannel.replace("{user}", message.member))
+			return false
+		}
+
+		channelNames = [message.member.voice.channel.name, channels[0]]
 	} else if (channels.length == 2) {
-		//sorry
-		const fromChannel = message.guild.channels.cache.find(channel => channel.name === channels[0].trim())
-		const toChannel = message.guild.channels.cache.find(channel => channel.name === channels[1].trim())
+		fromChannel = getGuildChannels(message.guild, "voice", channels[0])
+		toChannel = getGuildChannels(message.guild, "voice", channels[1])
+		
+		channelNames = [channels[0], channels[1]]
 	} else {
-		const fromChannel = undefined
-		const toChannel = undefined
 		message.channel.send(text.usage.move)
-		return
+		return false
 	}
 
 	// Verify channels
-	if (fromChannel == undefined || toChannel == undefined) {
-		message.channel.send(text.usage.move)
-		return
+	if (fromChannel.length === 0) {
+		message.channel.send(text.fail.channelNotFound.replace("{channel}", channelNames[0]))
+		return false
+	} else if (toChannel.length === 0) {
+		message.channel.send(text.fail.channelNotFound.replace("{channel}", channelNames[1]))
+		return false
+	} else {
+		toChannel = toChannel[0]
+		fromChannel = fromChannel[0]
 	}
 
-	// Get users in fromChannel
-	const usersToMove = fromChannel.members
+	if (fromChannel == undefined || toChannel == undefined) {
+		message.channel.send(text.fail.move)
+		return false
+	}
 
-	// Verify if users can be moved
-	// Verify caller can move users
-	// Verify users will fit in toChannel
+	// Get guild members in fromChannel
+	const membersToMove = Array.from(fromChannel.members)
 
-	// Move users to toChannel
+	// Verify caller can move members (i am so sorry for the following code)
+	if (!(fromChannel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MOVE_MEMBERS) &&
+	toChannel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.MOVE_MEMBERS) &&
+	fromChannel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.CONNECT) &&
+	toChannel.permissionsFor(message.member).has(Discord.Permissions.FLAGS.CONNECT))) {
+		message.channel.send(text.fail.userPermission)
+		return false
+	}
+
+	// Verify members will fit in toChannel
+	if (toChannel.userLimit !== 0 && membersToMove.length > (toChannel.userLimit - Array.from(toChannel.members).length)) {
+		message.channel.send(text.fail.voiceChannelFull.replace("{channel}", "toChannel"))
+		return false
+	}
+
+	// Move members to toChannel
+	for (let member of membersToMove) {
+		member[1].voice.setChannel(toChannel, "Moved by the >move command.")
+	}
 
 	// Reply to original message
+	message.channel.send(`Moved ${membersToMove.length} people from ${fromChannel} to ${toChannel}.`)
+	return true
 }
 
 function getGuildChannels(guild, type, name) {
