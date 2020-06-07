@@ -58,6 +58,16 @@ bot.on("message", message => {
 	}
 });
 
+function everyMinute() {
+	/*
+	* Runs every minute while the bot is online. Useful for stuff like "Now playing:" or whatever.
+	* 
+	* no arguments
+	* 
+	* returns nothing
+	*/
+}
+
 function deleteCmd(message) {
 	/*
 	* Deletes a number of messages (number is first part of message text after a " ")
