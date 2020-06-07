@@ -1,5 +1,5 @@
 {
-	"name": "janmBot",
+	"name": "janmbot",
 	"version": "1.0.0",
 	"description": "janm.ml Discord Bot",
 	"main": "bot.js",
