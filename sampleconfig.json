@@ -1,7 +1,8 @@
 {
-	"token": "BOT_TOKEN_HERE",
-	"clientID": "715153943952359464",
+	"token": "bot token (looks like MTk4NjIyNDgzNDcxOTI1MjQ4.Cl2FMQ.ZnCjm1XVW7vRze4b7Cq4se7kKWs)",
+	"clientID": "bot client ID/snowflake (looks like 157730590492196864)",
 	"permissions": 1803021890,
-	"secret": "SECRET_FOR_OAUTH_I_THINK",
-	"devUserID": "201335213341671424"
+	"secret": "oauth secret",
+	"devUserID": "client ID/snowflake of person hosting it (for message forwarding, DO NOT MAKE THE SAME AS THE BOT'S CLIENT ID!, looks like 157730590492196864)",
+	"deletedMessagesChannelID": "channel ID/snowflake of channel, in which to put deleted messages (may be empty, looks like 157730590492196864)"
 }
