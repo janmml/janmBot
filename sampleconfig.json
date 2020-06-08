@@ -4,6 +4,6 @@
 	"permissions": 1803021890,
 	"secret": "oauth secret",
 	"devUserID": "client ID/snowflake of person hosting it (for message forwarding, DO NOT MAKE THE SAME AS THE BOT'S CLIENT ID!, looks like 157730590492196864)",
-	"deletedMessagesChannelID": "channel ID/snowflake of channel, in which to put deleted messages (may be empty to disable this feature, looks like 157730590492196864)",
-	"editedMessagesChannelID": "channel ID/snowflake of channel, in which to put edited messages (may be empty to disable this feature, looks like 157730590492196864)"
+	"deletedMessagesChannel": "channel ID/snowflake of channel, in which to put deleted messages (may be empty to disable this feature, looks like 157730590492196864)",
+	"editedMessagesChannel": "channel ID/snowflake of channel, in which to put edited messages (may be empty to disable this feature, looks like 157730590492196864)"
 }
