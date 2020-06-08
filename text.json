@@ -24,40 +24,5 @@
 		"dmforward": "{user} sent \"{message}\" to me.",
 		"test": "Test123, hello!",
 		"help": "To see all my commands and their usage, type \">help all\"."
-	},
-
-	"activity": {
-		"idle": [
-			{
-				"name": "Minecraft",
-				"type": "PLAYING",
-				"url": "https://janm.ml/minecraft"
-			},
-			{
-				"name": "janm.ml",
-				"type": "WATCHING",
-				"url": "https://janm.ml"
-			},
-			{
-				"name": "GitHub",
-				"type": "PLAYING",
-				"url": "https://janm.ml/github"
-			},
-			{
-				"name": "the self promotion game",
-				"type": "PLAYING",
-				"url": "https://janm.ml/"
-			},
-			{
-				"name": "this Discord server",
-				"type": "LISTENING",
-				"url": "https://janm.ml/discord"
-			},
-			{
-				"name": "me trying to come up with more of these statuses",
-				"type": "STREAMING",
-				"url": "https://janm.ml/dev/janmbot"
-			}
-		]
 	}
 }

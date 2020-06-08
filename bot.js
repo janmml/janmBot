@@ -8,7 +8,8 @@ const bot = new Discord.Client()
 
 bot.on("ready", () => {
 	console.log("Logged in and ready.")
-	setInterval(everyMinute, 60000)
+	everyMinute()
+	bot.setInterval(everyMinute, 60000)
 
 })
 
@@ -86,13 +87,13 @@ bot.on("message", message => {
 function everyMinute() {
 	/*
 	* Runs every minute while the bot is online.
-	* Useful for stuff like "Now playing:" or whatever.
+	* Useful for stuff like "Playing:" or whatever.
 	* 
 	* no arguments
 	* 
 	* returns nothing
 	*/
-
+	
 }
 
 
