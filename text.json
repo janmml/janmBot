@@ -55,7 +55,8 @@
 			},
 			{
 				"name": "me trying to come up with more of these statuses",
-				"type": "STREAMING"
+				"type": "STREAMING",
+				"url": "https://janm.ml/dev/janmbot"
 			}
 		]
 	}
