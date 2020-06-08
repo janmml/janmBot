@@ -18,7 +18,8 @@ bot.on("message", message => {
 	}
 
 	if (!message.guild) {
-		// Reply with a standard bit of info about dev contact when not on a server
+		// Reply with a standard bit of info about dev contact
+		// when not on a server
 		message.reply(text.other.dmreply)
 
 		// And forward the message to the dev
@@ -81,6 +82,107 @@ bot.on("message", message => {
 	}
 })
 
+bot.on("messageDelete", message => {
+	if (config.deletedMessagesChannelID === "") {
+		// Ignore this, if the feature was disabled
+		return
+	}
+
+	if (message.author.bot) {
+		// Disregard messages from bots (including itself)
+		return
+	}
+
+	if (!message.guild) {
+		// Disregard messages not in guilds
+		return
+	}
+
+	logDeletedMessage(message)
+
+})
+
+bot.on("messageUpdate", (oldMessage, newMessage) => {
+	if (config.editedMessagesChannel === "") {
+		// Ignore this, if the feature was disabled
+		return
+	}
+
+	if (oldMessage.author.bot) {
+		// Disregard messages from bots (including itself)
+		return
+	}
+
+	if (!oldMessage.guild) {
+		// Disregard messages not in guilds
+		return
+	}
+
+	logUpdatedMessage(oldMessage, newMessage)
+
+})
+
+
+function logDeletedMessage(msg) {
+	/*
+	* Logs a message to a channel defined in config.json
+	* Note: Only works for recently posted messages.
+	* I think they need to be in the cache, or posted while the bot was online.
+	*
+	* message - type Discord.Message, the message to be logged (from a guild)
+	*
+	* returns - false on failure, true on success
+	*/
+
+	try {
+		// Get logging channel from config
+		getGuildChannels(msg.guild, "text", config.deletedMessagesChannel)[0]
+		// Send the message
+		.send(text.other.deletedMessage
+			.replace("{message}", msg.content)
+			.replace("{author}", msg.author.toString())
+			.replace("{date}", msg.createdAt.toISOString()),
+			{embed: msg.embed})
+
+		return true
+	} catch (error) {
+		// Catch the error and ignore it
+		return false
+	}
+}
+
+function logUpdatedMessage(oldMsg, newMsg) {
+	/*
+	* Logs a message to a channel defined in config.json
+	* Note: Only works for recently posted messages.
+	* I think they need to be in the cache, or posted while the bot was online.
+	*
+	* originalMessage - type Discord.Message, the original version of
+	* the message to be logged (from a guild)
+	*
+	* newMessage - type Discord.Message, the new version of the message
+	* to be logged (from a guild)
+	*
+	* returns - false on failure, true on success
+	*/
+
+	try {
+		// Get logging channel from config
+		getGuildChannels(newMsg.guild, "text", config.editedMessagesChannel)[0]
+		// Send the message
+		.send(text.other.updatedMessage
+			.replace("{oldMessage}", oldMsg.content)
+			.replace("{author}", oldMsg.author.toString())
+			.replace("{date}", oldMsg.createdAt.toISOString())
+			.replace("{newMessage}", newMsg.content),
+			{embed: [oldMsg.embed, newMsg.embed]})
+
+		return true
+	} catch (error) {
+		// Catch the error and ignore it
+		return false
+	}
+}
 
 function deleteCmd(message) {
 	/*
