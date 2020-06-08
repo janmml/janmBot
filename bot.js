@@ -104,7 +104,7 @@ bot.on("messageDelete", message => {
 
 bot.on("messageDeleteBulk", messages => {
 	// Convert to array (2D)
-	messages = Array.from(messages)
+	messages = Array.from(messages).reverse()
 
 	for (let message of messages) {
 		message = message[1]
@@ -114,7 +114,7 @@ bot.on("messageDeleteBulk", messages => {
 			return
 		}
 
-		if (messages.author.bot) {
+		if (message.author.bot) {
 			// Disregard messages from bots (including itself)
 			return
 		}
@@ -125,7 +125,7 @@ bot.on("messageDeleteBulk", messages => {
 		}
 
 		logDeletedMessage(message)
-		
+
 	}
 })
 
