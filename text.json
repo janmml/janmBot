@@ -16,7 +16,9 @@
 	},
 
 	"success": {
-		"move": "Moved {amountOfMembers} people from {fromChannel} to {toChannel}."
+		"move": "Moved {amountOfMembers} people from {fromChannel} to {toChannel}.",
+		"deletedMessage": "\"{message}\" by {author} from {date} was deleted.",
+		"updatedMessage": "\"{oldMessage}\" by {author} from {date} was updated to \"{newMessage}\"."
 	},
 
 	"other": {
