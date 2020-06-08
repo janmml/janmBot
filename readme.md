@@ -1,6 +1,5 @@
 # janmBot
 
-![](https://janm.ml/assets/logo/512x512.png)
 ![](https://david-dm.org/janmml/janmBot.svg)
 
 janmBot is a custom Discord Bot based on [Discord.js](https://github.com/discordjs/discord.js).
