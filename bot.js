@@ -102,6 +102,33 @@ bot.on("messageDelete", message => {
 
 })
 
+bot.on("messageDeleteBulk", messages => {
+	// Convert to array (2D)
+	messages = Array.from(messages)
+
+	for (let message of messages) {
+		message = message[1]
+
+		if (config.deletedMessagesChannelID === "") {
+			// Ignore this, if the feature was disabled
+			return
+		}
+
+		if (messages.author.bot) {
+			// Disregard messages from bots (including itself)
+			return
+		}
+
+		if (!message.guild) {
+			// Disregard messages not in guilds
+			return
+		}
+
+		logDeletedMessage(message)
+		
+	}
+})
+
 bot.on("messageUpdate", (oldMessage, newMessage) => {
 	if (config.editedMessagesChannel === "") {
 		// Ignore this, if the feature was disabled
