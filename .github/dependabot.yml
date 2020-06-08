@@ -1,8 +1,11 @@
 version: 2
 updates:
+# Update npm packages
   - package-ecosystem: "npm"
     directory: "/"
+    # Check weekly for new versions of dependencies
     schedule:
         interval: "weekly"
+    # Assign pull requests to me
     assignees:
         - "janmml"
