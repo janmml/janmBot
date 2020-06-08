@@ -235,8 +235,8 @@ function moveCmd(message) {
 	// Reply to original message
 	message.channel.send(text.success.move
 		.replace("{amountOfMembers}", membersToMove.length)
-		.replace("{fromChannel}", fromChannel)
-		.replace("{toChannel}", toChannel))
+		.replace("{fromChannel}", fromChannel.toString())
+		.replace("{toChannel}", toChannel.toString()))
 
 	return true
 }
@@ -301,6 +301,7 @@ function getGuildChannels(guild, type, name) {
 	let channelName, channelNameType
 
 	if (name !== undefined && typeof(name) === "string") {
+		name = name.trim()
 		// Check which name it's using
 		if (/.+\..+/giu.test(name)) {
 			// category.name
@@ -322,7 +323,7 @@ function getGuildChannels(guild, type, name) {
 		} else {
 			// probably name
 			channelNameType = "name"
-			channelName = name.trim()
+			channelName = name
 
 		}
 	}
