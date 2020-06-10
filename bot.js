@@ -375,7 +375,7 @@ function moveCmd(message) {
 		membersToMove.length > (toChannel.userLimit - spaceInToChannel)
 	) {
 		message.channel.send(text.fail.voiceChannelFull
-			.replace("{channel}", "toChannel"))
+			.replace("{channel}", toChannel))
 
 		return false
 	}
