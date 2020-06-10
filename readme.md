@@ -25,6 +25,6 @@ Note that the bot isn't really made to work on multiple servers at once, so if y
 - [Developer Contact](https://janm.ml/contact)
 - [Discord Server](https://janm.ml/discord)
 
-## License
+## Licence
 
 janmBot is licensed under the [European Union Public License 1.2](http://ec.europa.eu/idabc/eupl.html) or later.
