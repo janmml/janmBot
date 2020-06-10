@@ -108,7 +108,7 @@ bot.on("message", message => {
 })
 
 bot.on("messageDelete", message => {
-	if (config.deletedMessagesChannelID === "") {
+	if (config.deletedMsgsChannel === "") {
 		// Ignore this, if the feature was disabled
 		return
 	}
@@ -134,7 +134,7 @@ bot.on("messageDeleteBulk", messages => {
 	for (let message of messages) {
 		message = message[1]
 
-		if (config.deletedMessagesChannelID === "") {
+		if (config.deletedMsgsChannel === "") {
 			// Ignore this, if the feature was disabled
 			return
 		}
@@ -155,7 +155,7 @@ bot.on("messageDeleteBulk", messages => {
 })
 
 bot.on("messageUpdate", (oldMessage, newMessage) => {
-	if (config.editedMessagesChannel === "") {
+	if (config.updatedMsgsChannel === "") {
 		// Ignore this, if the feature was disabled
 		return
 	}
@@ -188,13 +188,13 @@ function logDeletedMessage(msg) {
 
 	try {
 		// Get logging channel from config
-		getGuildChannels(msg.guild, "text", config.deletedMessagesChannel)[0]
+		getGuildChannels(msg.guild, "text", config.deletedMsgsChannel)[0]
 		// Send the message
 		.send(text.other.deletedMessage
 			.replace("{message}", msg.content)
 			.replace("{author}", msg.author.toString())
 			.replace("{date}", msg.createdAt.toISOString()),
-			{embed: msg.embed})
+			{embed: msg.embed, split: true})
 
 		return true
 	} catch (error) {
@@ -220,14 +220,17 @@ function logUpdatedMessage(oldMsg, newMsg) {
 
 	try {
 		// Get logging channel from config
-		getGuildChannels(newMsg.guild, "text", config.editedMessagesChannel)[0]
+		getGuildChannels(newMsg.guild, "text", config.updatedMsgsChannel)[0]
 		// Send the message
 		.send(text.other.updatedMessage
 			.replace("{oldMessage}", oldMsg.content)
 			.replace("{author}", oldMsg.author.toString())
-			.replace("{date}", oldMsg.createdAt.toISOString())
-			.replace("{newMessage}", newMsg.content),
-			{embed: [oldMsg.embed, newMsg.embed]})
+			.replace("{date}", oldMsg.createdAt.toISOString()),
+			{embed: oldMsg.embed, split: true})
+
+		getGuildChannels(newMsg.guild, "text", config.updatedMsgsChannel)[0]
+		// Send the second (new) message
+		.send("\"" + newMsg.content + "\"", {embed: newMsg.embed, split: true})
 
 		return true
 	} catch (error) {

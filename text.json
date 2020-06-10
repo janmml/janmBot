@@ -26,6 +26,6 @@
 		"dmforward": "{user} sent \"{message}\" to me.",
 		"test": "Test123, hello!",
 		"deletedMessage": "\"{message}\" by {author} from {date} was deleted.",
-		"updatedMessage": "\"{oldMessage}\" by {author} from {date} was updated to \"{newMessage}\"."
+		"updatedMessage": "\"{oldMessage}\" by {author} from {date} was updated to the following: "
 	}
 }
