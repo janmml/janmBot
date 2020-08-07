@@ -1,17 +1,23 @@
 "use strict"
 
+// Imports
 const config = require("./config.json")
 const text = require("./text.json")
 const Discord = require("discord.js")
 
+// Initialize the bot
 const bot = new Discord.Client()
 
 bot.on("ready", () => {
+	// Once the bot has loaded up and connected to the Discord API
+
 	console.log("Logged in and ready.")
 
 })
 
 bot.on("message", message => {
+	// On every message the bot sees
+
 	if (message.author.bot) {
 		// Disregard messages from bots (including itself)
 		return
@@ -108,6 +114,8 @@ bot.on("message", message => {
 })
 
 bot.on("messageDelete", message => {
+	// On every message, that the bot saw get deleted
+
 	if (config.deletedMsgsChannel === "") {
 		// Ignore this, if the feature was disabled
 		return
@@ -128,6 +136,8 @@ bot.on("messageDelete", message => {
 })
 
 bot.on("messageDeleteBulk", messages => {
+	// On every bulk-delete of messages the bot saw
+
 	// Convert to array (2D)
 	messages = Array.from(messages).reverse()
 
@@ -155,6 +165,8 @@ bot.on("messageDeleteBulk", messages => {
 })
 
 bot.on("messageUpdate", (oldMessage, newMessage) => {
+	// On every message update the bot saw
+
 	if (config.updatedMsgsChannel === "") {
 		// Ignore this, if the feature was disabled
 		return
@@ -174,6 +186,8 @@ bot.on("messageUpdate", (oldMessage, newMessage) => {
 
 })
 
+
+// Command functions
 
 function moveCmd(message) {
 	/*
@@ -288,6 +302,54 @@ function moveCmd(message) {
 
 	return true
 }
+
+function deleteCmd(message) {
+	/*
+	* Deletes a number of messages
+	* (number is first part of message text after a " ")
+	* 
+	* message - type Message, must be from a guild
+	* 
+	* returns - false on failure, true on success
+	*/
+
+	// Get amount of messages to be deleted
+	const cmd = [
+		message.content.split(" ")[0],
+		message.content.substring(message.content.split(" ")[0].length)
+	]
+
+	const msgNum = parseInt(cmd[1])
+
+	// Check command
+	if (isNaN(msgNum)) {
+		message.channel.send(text.usage.delete)
+		return false
+	}
+
+	if (msgNum < 1 || msgNum > 99) {
+		message.channel.send(text.usage.delete)
+		return false
+	}
+
+	// Check permissions
+	if (
+		!message.member.permissionsIn(message.channel)
+			.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)
+	) {
+		message.channel.send(text.fail.userPermission)
+		return false
+	}
+	
+	// Delete messages
+	// + 1 to delete the caller's message, then after that msgNum messages
+	message.channel.bulkDelete(msgNum + 1)
+
+	return true
+}
+
+
+// Utility functions
 
 function getGuildChannels(guild, type, name) {
 	/*
@@ -407,7 +469,6 @@ function getGuildChannels(guild, type, name) {
 	return channels
 }
 
-
 function logDeletedMessage(msg) {
 	/*
 	* Logs a message to a channel defined in config.json
@@ -470,51 +531,6 @@ function logUpdatedMessage(oldMsg, newMsg) {
 		// Catch the error and ignore it
 		return false
 	}
-}
-
-function deleteCmd(message) {
-	/*
-	* Deletes a number of messages
-	* (number is first part of message text after a " ")
-	* 
-	* message - type Message, must be from a guild
-	* 
-	* returns - false on failure, true on success
-	*/
-
-	// Get amount of messages to be deleted
-	const cmd = [
-		message.content.split(" ")[0],
-		message.content.substring(message.content.split(" ")[0].length)
-	]
-
-	const msgNum = parseInt(cmd[1])
-
-	// Check command
-	if (isNaN(msgNum)) {
-		message.channel.send(text.usage.delete)
-		return false
-	}
-
-	if (msgNum < 1 || msgNum > 99) {
-		message.channel.send(text.usage.delete)
-		return false
-	}
-
-	// Check permissions
-	if (
-		!message.member.permissionsIn(message.channel)
-			.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)
-	) {
-		message.channel.send(text.fail.userPermission)
-		return false
-	}
-	
-	// Delete messages
-	// + 1 to delete the caller's message, then after that msgNum messages
-	message.channel.bulkDelete(msgNum + 1)
-
-	return true
 }
 
 
