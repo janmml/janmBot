@@ -175,115 +175,6 @@ bot.on("messageUpdate", (oldMessage, newMessage) => {
 })
 
 
-function logDeletedMessage(msg) {
-	/*
-	* Logs a message to a channel defined in config.json
-	* Note: Only works for recently posted messages.
-	* I think they need to be in the cache, or posted while the bot was online.
-	*
-	* message - type Discord.Message, the message to be logged (from a guild)
-	*
-	* returns - false on failure, true on success
-	*/
-
-	try {
-		// Get logging channel from config
-		getGuildChannels(msg.guild, "text", config.deletedMsgsChannel)[0]
-		// Send the message
-		.send(text.other.deletedMessage
-			.replace("{message}", msg.content)
-			.replace("{author}", msg.author.toString())
-			.replace("{date}", msg.createdAt.toISOString()),
-			{embed: msg.embed, split: true})
-
-		return true
-	} catch (error) {
-		// Catch the error and ignore it
-		return false
-	}
-}
-
-function logUpdatedMessage(oldMsg, newMsg) {
-	/*
-	* Logs a message to a channel defined in config.json
-	* Note: Only works for recently posted messages.
-	* I think they need to be in the cache, or posted while the bot was online.
-	*
-	* originalMessage - type Discord.Message, the original version of
-	* the message to be logged (from a guild)
-	*
-	* newMessage - type Discord.Message, the new version of the message
-	* to be logged (from a guild)
-	*
-	* returns - false on failure, true on success
-	*/
-
-	try {
-		// Get logging channel from config
-		getGuildChannels(newMsg.guild, "text", config.updatedMsgsChannel)[0]
-		// Send the message
-		.send(text.other.updatedMessage
-			.replace("{oldMessage}", oldMsg.content)
-			.replace("{author}", oldMsg.author.toString())
-			.replace("{date}", oldMsg.createdAt.toISOString()),
-			{embed: oldMsg.embed, split: true})
-
-		getGuildChannels(newMsg.guild, "text", config.updatedMsgsChannel)[0]
-		// Send the second (new) message
-		.send("\"" + newMsg.content + "\"", {embed: newMsg.embed, split: true})
-
-		return true
-	} catch (error) {
-		// Catch the error and ignore it
-		return false
-	}
-}
-
-function deleteCmd(message) {
-	/*
-	* Deletes a number of messages
-	* (number is first part of message text after a " ")
-	* 
-	* message - type Message, must be from a guild
-	* 
-	* returns - false on failure, true on success
-	*/
-
-	// Get amount of messages to be deleted
-	const cmd = [
-		message.content.split(" ")[0],
-		message.content.substring(message.content.split(" ")[0].length)
-	]
-
-	const msgNum = parseInt(cmd[1])
-
-	// Check command
-	if (isNaN(msgNum)) {
-		message.channel.send(text.usage.delete)
-		return false
-	}
-
-	if (msgNum < 1 || msgNum > 99) {
-		message.channel.send(text.usage.delete)
-		return false
-	}
-
-	// Check permissions
-	if (
-		!message.member.permissionsIn(message.channel)
-			.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)
-	) {
-		message.channel.send(text.fail.userPermission)
-		return false
-	}
-	
-	// Delete messages
-	// + 1 to delete the caller's message, then after that msgNum messages
-	message.channel.bulkDelete(msgNum + 1)
-
-	return true
-}
-
 function moveCmd(message) {
 	/*
 	* Moves guild members from one channel to another.
@@ -515,5 +406,116 @@ function getGuildChannels(guild, type, name) {
 
 	return channels
 }
+
+
+function logDeletedMessage(msg) {
+	/*
+	* Logs a message to a channel defined in config.json
+	* Note: Only works for recently posted messages.
+	* I think they need to be in the cache, or posted while the bot was online.
+	*
+	* message - type Discord.Message, the message to be logged (from a guild)
+	*
+	* returns - false on failure, true on success
+	*/
+
+	try {
+		// Get logging channel from config
+		getGuildChannels(msg.guild, "text", config.deletedMsgsChannel)[0]
+		// Send the message
+		.send(text.other.deletedMessage
+			.replace("{message}", msg.content)
+			.replace("{author}", msg.author.toString())
+			.replace("{date}", msg.createdAt.toISOString()),
+			{embed: msg.embed, split: true})
+
+		return true
+	} catch (error) {
+		// Catch the error and ignore it
+		return false
+	}
+}
+
+function logUpdatedMessage(oldMsg, newMsg) {
+	/*
+	* Logs a message to a channel defined in config.json
+	* Note: Only works for recently posted messages.
+	* I think they need to be in the cache, or posted while the bot was online.
+	*
+	* originalMessage - type Discord.Message, the original version of
+	* the message to be logged (from a guild)
+	*
+	* newMessage - type Discord.Message, the new version of the message
+	* to be logged (from a guild)
+	*
+	* returns - false on failure, true on success
+	*/
+
+	try {
+		// Get logging channel from config
+		getGuildChannels(newMsg.guild, "text", config.updatedMsgsChannel)[0]
+		// Send the message
+		.send(text.other.updatedMessage
+			.replace("{oldMessage}", oldMsg.content)
+			.replace("{author}", oldMsg.author.toString())
+			.replace("{date}", oldMsg.createdAt.toISOString()),
+			{embed: oldMsg.embed, split: true})
+
+		getGuildChannels(newMsg.guild, "text", config.updatedMsgsChannel)[0]
+		// Send the second (new) message
+		.send("\"" + newMsg.content + "\"", {embed: newMsg.embed, split: true})
+
+		return true
+	} catch (error) {
+		// Catch the error and ignore it
+		return false
+	}
+}
+
+function deleteCmd(message) {
+	/*
+	* Deletes a number of messages
+	* (number is first part of message text after a " ")
+	* 
+	* message - type Message, must be from a guild
+	* 
+	* returns - false on failure, true on success
+	*/
+
+	// Get amount of messages to be deleted
+	const cmd = [
+		message.content.split(" ")[0],
+		message.content.substring(message.content.split(" ")[0].length)
+	]
+
+	const msgNum = parseInt(cmd[1])
+
+	// Check command
+	if (isNaN(msgNum)) {
+		message.channel.send(text.usage.delete)
+		return false
+	}
+
+	if (msgNum < 1 || msgNum > 99) {
+		message.channel.send(text.usage.delete)
+		return false
+	}
+
+	// Check permissions
+	if (
+		!message.member.permissionsIn(message.channel)
+			.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)
+	) {
+		message.channel.send(text.fail.userPermission)
+		return false
+	}
+	
+	// Delete messages
+	// + 1 to delete the caller's message, then after that msgNum messages
+	message.channel.bulkDelete(msgNum + 1)
+
+	return true
+}
+
 
 bot.login(config.token)
