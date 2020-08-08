@@ -487,6 +487,11 @@ function logDeletedMessage(msg) {
 	*/
 
 	try {
+		// Get message attachments
+		let attachments = []
+		// sorry
+		msg.attachments.array().forEach((item) => {attachments.push(item.proxyURL)})
+
 		// Get logging channel from config
 		getGuildChannels(msg.guild, "text", config.deletedMsgsChannel)[0]
 		// Send the message
@@ -494,7 +499,7 @@ function logDeletedMessage(msg) {
 			.replace("{message}", msg.content)
 			.replace("{author}", msg.author.toString())
 			.replace("{date}", msg.createdAt.toISOString()),
-			{embed: msg.embed, split: true})
+			{embed: msg.embed, split: true, files: attachments})
 
 		return true
 	} catch (error) {
@@ -519,18 +524,48 @@ function logUpdatedMessage(oldMsg, newMsg) {
 	*/
 
 	try {
+		// Get message attachments
+		let oldAttachments = []
+		let newAttachments = []
+		// sorry
+		oldMsg.attachments.array().forEach((item) => {
+			oldAttachments.push(item.proxyURL)
+		})
+		newMsg.attachments.array().forEach((item) => {
+			newAttachments.push(item.proxyURL)
+		})
+
 		// Get logging channel from config
-		getGuildChannels(newMsg.guild, "text", config.updatedMsgsChannel)[0]
+		let loggingChannel = getGuildChannels(newMsg.guild, "text",
+			config.updatedMsgsChannel)[0]
+
 		// Send the message
-		.send(text.other.updatedMessage
+		loggingChannel.send(text.other.updatedMessage
 			.replace("{oldMessage}", oldMsg.content)
 			.replace("{author}", oldMsg.author.toString())
 			.replace("{date}", oldMsg.createdAt.toISOString()),
-			{embed: oldMsg.embed, split: true})
+			{embed: oldMsg.embed, split: true, files: oldAttachments})
+		// Then send the second (new) message
+		.then(message => {
+			// Access the nonce of the first message before sending the
+			// second one, so that they get received by Discord
+			// in the correct order. This helps, because the message nonce only
+			// shows once the message is received by the API.
+			if (typeof(message) == typeof(Discord.Message)) {
+				// If one message is returned
+				// Do something useless
+				if (message.nonce);
+			} else {
+				// If an array of multiple messages is returned
+				if (message[0].nonce);
+			}
 
-		getGuildChannels(newMsg.guild, "text", config.updatedMsgsChannel)[0]
-		// Send the second (new) message
-		.send("\"" + newMsg.content + "\"", {embed: newMsg.embed, split: true})
+			loggingChannel.send("\"" + newMsg.content + "\"",
+				{embed: newMsg.embed, split: true, files: newAttachments})
+
+		}
+
+		)
 
 		return true
 	} catch (error) {
