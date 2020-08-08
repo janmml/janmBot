@@ -323,22 +323,9 @@ function helpCmd(message) {
 		for (let command in text.usage) {
 			helpMessage = helpMessage + text.usage[command] + "\n\n"
 
-			// If the message length is approaching Discord's length limit,
-			if (helpMessage.length > 1500) {
-				// send it now,
-				message.channel.send(helpMessage)
-				// and start a new message.
-				helpMessage = ""
-
-			}
-
 		}
 
-		if (helpMessage) {
-			// Send the message if it's not empty
-			message.channel.send(helpMessage)
-
-		}
+		message.channel.send(helpMessage, {split: true})
 
 	} else {
 		// Display usage for one command only
