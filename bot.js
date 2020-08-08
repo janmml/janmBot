@@ -43,46 +43,8 @@ bot.on("message", message => {
 
 	} else if (message.content.startsWith(">help")) {
 		// Help command:
-		if (message.cleanContent.trim() === ">help") {
-			// Display usage for help command
-			message.channel.send(text.usage.help)
+		helpCmd(message)
 
-		} else if (message.cleanContent.trim() === ">help all") {
-			// Display usage for all commands
-			let helpMessage = ""
-
-			for (let command in text.usage) {
-				helpMessage = helpMessage + text.usage[command] + "\n\n"
-
-			}
-
-			message.channel.send(helpMessage)
-
-		} else {
-			// Display usage for one command only
-			// Get command name from message
-			let command = message.cleanContent.split(" ")[1]
-
-			try {
-				// Try to send the command usage
-				let usage = text.usage[command]
-
-				if (usage == undefined || usage == "") {
-					throw ReferenceError()
-
-				} else {
-					message.channel.send(text.usage[command])
-
-				}
-
-			} catch (error) {
-				// If the command isn't found, send an error
-				message.channel.send(text.fail.help)
-
-			}
-
-		}
-	
 	} else if (
 		message.content.startsWith(">mv") ||
 		message.content.startsWith(">move")
@@ -346,6 +308,50 @@ function deleteCmd(message) {
 	message.channel.bulkDelete(msgNum + 1)
 
 	return true
+}
+
+function helpCmd(message) {
+	// Help command:
+	if (message.cleanContent.trim() === ">help") {
+		// Display usage for help command
+		message.channel.send(text.usage.help)
+
+	} else if (message.cleanContent.trim() === ">help all") {
+		// Display usage for all commands
+		let helpMessage = ""
+
+		for (let command in text.usage) {
+			helpMessage = helpMessage + text.usage[command] + "\n\n"
+
+		}
+
+		message.channel.send(helpMessage)
+
+	} else {
+		// Display usage for one command only
+		// Get command name from message
+		let command = message.cleanContent.split(" ")[1]
+
+		try {
+			// Try to send the command usage
+			let usage = text.usage[command]
+
+			if (usage == undefined || usage == "") {
+				throw ReferenceError()
+
+			} else {
+				message.channel.send(text.usage[command])
+
+			}
+
+		} catch (error) {
+			// If the command isn't found, send an error
+			message.channel.send(text.fail.help)
+
+		}
+
+	}
+
 }
 
 
