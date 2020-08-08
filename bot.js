@@ -43,7 +43,13 @@ bot.on("message", message => {
 
 	} else if (message.content.startsWith(">help")) {
 		// Help command:
-		helpCmd(message)
+		try {
+			helpCmd(message)
+
+		} catch (error) {
+			message.channel.send(text.fail.help)
+
+		}
 
 	} else if (
 		message.content.startsWith(">mv") ||
