@@ -4,7 +4,7 @@
 	"description": "janm.ml Discord Bot",
 	"main": "bot.js",
 	"author": "janm.ml",
-	"licence": "EUPL-1.2",
+	"license": "EUPL-1.2",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/janmml/janmBot.git"
