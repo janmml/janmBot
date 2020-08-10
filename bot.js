@@ -534,13 +534,27 @@ function logUpdatedMessage(oldMsg, newMsg) {
 		// Get message attachments
 		let oldAttachments = []
 		let newAttachments = []
-		// sorry
+		
 		oldMsg.attachments.array().forEach((item) => {
 			oldAttachments.push(item.proxyURL)
 		})
 		newMsg.attachments.array().forEach((item) => {
 			newAttachments.push(item.proxyURL)
 		})
+
+		// Ignore messages, that differ only in embed
+		// (this happens when an embed loads).
+		if (oldMsg.id === oldMsg.id &&
+			oldMsg.author.id === oldMsg.author.id &&
+			oldMsg.content === oldMsg.content &&
+			oldMsg.tts === oldMsg.tts &&
+			oldMsg.nonce === oldMsg.nonce &&
+			oldMsg.attachments.length === oldMsg.attachments.length &&
+			oldMsg.embeds.length === 0 &&
+			newMsg.embeds.length === 1
+		) {
+			return false
+		}
 
 		// Get logging channel from config
 		let loggingChannel = getGuildChannels(newMsg.guild, "text",
