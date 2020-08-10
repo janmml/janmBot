@@ -1,7 +1,13 @@
 {
 	"name": "janmbot",
-	"version": "0.9.0",
+	"version": "1.0.0",
+	"private": true,
 	"description": "janm.ml Discord Bot",
+	"homepage": "https://janm.ml/dev/janmBot",
+	"bugs": {
+		"url": "https://github.com/janmml/janmBot/issues/",
+		"email": "dev@janm.ml"
+	},
 	"main": "bot.js",
 	"author": "janm.ml",
 	"license": "EUPL-1.2",
