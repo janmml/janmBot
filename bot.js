@@ -4,7 +4,6 @@
 const config = require("./config.json")
 const text = require("./text.json")
 const Discord = require("discord.js")
-const random = require("random-number-csprng")
 
 // Initialize the bot
 const bot = new Discord.Client()

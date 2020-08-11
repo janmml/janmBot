@@ -16,7 +16,6 @@
 		"url": "https://github.com/janmml/janmBot.git"
 	},
 	"dependencies": {
-		"discord.js": "^12.2.0",
-		"random-number-csprng": "^1.0.2"
+		"discord.js": "^12.2.0"
 	}
 }
