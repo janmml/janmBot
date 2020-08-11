@@ -549,8 +549,7 @@ function logUpdatedMessage(oldMsg, newMsg) {
 			oldMsg.tts === oldMsg.tts &&
 			oldMsg.nonce === oldMsg.nonce &&
 			oldMsg.attachments.length === oldMsg.attachments.length &&
-			oldMsg.embeds.length === 0 &&
-			newMsg.embeds.length === 1
+			oldMsg.embeds.length < newMsg.embeds.length
 		) {
 			return false
 		}
