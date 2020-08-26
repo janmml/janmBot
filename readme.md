@@ -16,11 +16,16 @@ Note that the bot isn't really made to work on multiple servers at once, so if y
 
 ## Commands
 
-- \>test
-- \>help
-- \>move
-- \>delete
-- \>roll
+- \>test - Replies with a simple test messsage.
+- \>help - Provide help information about commands.
+- \>move - Move users from one voice channel to another.
+- \>delete - Bulk-delete text messages.
+- \>roll - Roll dice using [dice notation](https://en.wikipedia.org/wiki/Dice_notation).
+
+## Other features
+
+- Logging of deleted and edited messages.
+- Direct message forwarding.
 
 ## Links
 
