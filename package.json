@@ -1,6 +1,6 @@
 {
 	"name": "janmbot",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"private": true,
 	"description": "janm.ml Discord Bot",
 	"homepage": "https://janm.ml/dev/janmBot",
@@ -16,6 +16,6 @@
 		"url": "https://github.com/janmml/janmBot.git"
 	},
 	"dependencies": {
-		"discord.js": "^12.2.0"
+		"discord.js": "^12.3.1"
 	}
 }
