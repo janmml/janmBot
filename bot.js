@@ -971,10 +971,11 @@ function logUpdatedMessage(oldMsg, newMsg) {
 			if (typeof(message) == typeof(Discord.Message)) {
 				// If one message is returned
 				// Do something useless
-				if (message.nonce);
+				if (message.nonce) {}
 			} else {
 				// If an array of multiple messages is returned
-				if (message[0].nonce);
+				// Do something useless
+				if (message[0].nonce) {}
 			}
 
 			loggingChannel.send("\"" + newMsg.content + "\"",
