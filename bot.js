@@ -658,7 +658,7 @@ function rollDice(amount, sides) {
 		throw new RangeError("Amount and/or sides are too small.")
 	}
 
-	// Check if amount and sides are ints
+	// Check if amount and sides are integers
 	if (!(Number.isInteger(amount) && Number.isInteger(sides))) {
 		throw new TypeError("Amount and sides must be integers.")
 	}
