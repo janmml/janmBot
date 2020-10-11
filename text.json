@@ -4,7 +4,8 @@
 		"help": "Usage for command \">help\": \n>help all or >help [command]. \nDisplays the usage information for the given command, or all commands with \">help all\".",
 		"move": "Usage for command \">mv\"/\">move\": \n>mv [destinationChannel] or \n>mv [originChannel] > [destinationChannel]. \nBoth the destination and origin channels are Voice Channel names (make sure to use the full name of the channels, the full category name [dot] to full name of the channel, or the channel ID). \nFor the first version, with only the destination channel, you must be in a voice channel. Your current channel will become the origin channel, from which people will be moved.",
 		"delete": "Usage for command \">rm\"/\">remove\"/\">del\"/\">delete\": \n>rm [numberOfMessages]. \nThe number of messages to be deleted has to be an integer less than 100. \nThis will delete that many messages (newest first) wherever it was called. The message that called this command is not included in the number of messages. \nCaller must have \"Manage Messages\" permission.",
-		"roll": "Usage for command \">roll\": \n>roll [dice]. \n[dice] is the dice to be rolled including any modifiers and math, in Dice notation (see <https://en.wikipedia.org/wiki/Dice_notation> and <https://roll20.zendesk.com/hc/en-us/articles/360037773133>). \nNote, however, that not all possible die rolls are supported. To check if something is supported, use the command \">roll supported\" (or just try it). If you would like to suggest an addition to the supported rolls, create a new issue over at <https://github.com/janmml/janmBot/issues/>."
+		"roll": "Usage for command \">roll\": \n>roll [dice]. \n[dice] is the dice to be rolled including any modifiers and math, in Dice notation (see <https://en.wikipedia.org/wiki/Dice_notation> and <https://roll20.zendesk.com/hc/en-us/articles/360037773133>). \nNote, however, that not all possible die rolls are supported. To check if something is supported, use the command \">roll supported\" (or just try it). If you would like to suggest an addition to the supported rolls, create a new issue over at <https://github.com/janmml/janmBot/issues/>.",
+		"poll": "Usage for command \">poll\": \n>poll [poll title]; [voting options, separated by periods]; [voting time (optional)]. \nCreates a poll as a reply to the command. \nThe message it sends collects reactions for a time specified in the command, then tallies up the votes and sends the result in another message. \nVoting time can be in any of the following formats: \n • [dd]d [HH]h [mm]m [ss]s, \n • [dd]:[HH]:[mm]:[ss], \n • number of seconds, \nwhere 0 <= [dd] < 7, 0 <= [HH] < 24, 0 <= [mm] < 60, 0 <= [ss] < 60. \nThe last format may be any number of seconds greater than 0. In the second format, days may be omitted. Hours may also be omitted, but only if days are omitted as well. In the first format, any units may be omitted. \nThe total time must be more than 0 seconds, and less than 7 days."
 	},
 
 	"fail": {
@@ -16,11 +17,16 @@
 		"move": "Move command failed. If this keeps happening, please contact my developer for a fix.",
 		"delete": "Delete command failed. If this keeps happening, please contact my developer for a fix.",
 		"help": "Help command failed. Please check your spelling, or ensure that the command you're asking about really exists.",
-		"roll": "Roll command failed. Please check your spelling, and make sure you aren't rolling too many dice. You can roll things involving up to 1000 calculations (a calculation is a die roll, mathematical function, etc.). Also, make sure the roll you're requesting is supported (see the commands \">help roll\" and \">roll supported\")."
+		"roll": "Roll command failed. Please check your spelling, and make sure you aren't rolling too many dice. You can roll things involving up to 1000 calculations (a calculation is a die roll, mathematical function, etc.). Also, make sure the roll you're requesting is supported (see the commands \">help roll\" and \">roll supported\").",
+		"poll": "Poll command failed. Please check the voting options, and ensure that the voting time is within limits. If this issue continues, contact my developers."
 	},
 
 	"success": {
-		"move": "Moved {amountOfMembers} people from {fromChannel} to {toChannel}."
+		"move": "Moved {amountOfMembers} people from {fromChannel} to {toChannel}.",
+		"poll": {
+			"created": "Poll: \n{title} \n\n{options}\nVote now!",
+			"finished": "Poll finished! The question was: \n{title} \n\nHere are the results: \n{results}"
+		}
 	},
 
 	"other": {
@@ -29,6 +35,7 @@
 		"test": "Test123, hello!",
 		"deletedMessage": "\"{message}\" by {author} from {date} was deleted.",
 		"updatedMessage": "\"{oldMessage}\" by {author} from {date} was updated to the following: ",
-		"supportedRolls": "Rolls currently supported by the >roll command (Capital letters represent numbers, square brackets surround optional parts): \n• +, -, *, ×, /, ÷, (, )\n• A\n• [A]dB\n• [A]d%, [A]d‰, [A]d‱"
+		"supportedRolls": "Rolls currently supported by the >roll command (Capital letters represent numbers, square brackets surround optional parts): \n• +, -, *, ×, /, ÷, (, )\n• A\n• [A]dB\n• [A]d%, [A]d‰, [A]d‱",
+		"pollReactions": ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴", "🇵", "🇶", "🇷", "🇸", "🇹", "🇺", "🇻", "🇼", "🇽", "🇾", "🇿"]
 	}
 }

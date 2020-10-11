@@ -21,6 +21,7 @@ Note that the bot isn't really made to work on multiple servers at once, so if y
 - \>move - Move users from one voice channel to another.
 - \>delete - Bulk-delete text messages.
 - \>roll - Roll dice using [dice notation](https://en.wikipedia.org/wiki/Dice_notation).
+- \>poll - Create a poll, for which the bot will collect votes using message reactions.
 
 ## Other features
 

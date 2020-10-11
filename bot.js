@@ -90,6 +90,16 @@ bot.on("message", message => {
 
 		}
 
+	} else if (message.content.startsWith(">poll")) {
+		// Poll command:
+		try {
+			pollCmd(message)
+
+		} catch (error) {
+			message.channel.send(text.fail.poll)
+
+		}
+
 	}
 
 })
@@ -631,6 +641,155 @@ function rollCmd(message) {
 
 }
 
+function pollCmd(message) {
+	/*
+	* Creates a poll as a reply to the command.
+	* 
+	* The message it sends collects reactions for a time specified
+	* in the command, then tallies up the votes and
+	* sends the result in another message.
+	*
+	* The format for the poll info is as follows:
+	* >poll [poll title]; [voting options]; [voting time (optional)]
+	*
+	* Voting options are seperated by periods.
+	* Each voting option may be prepended by an emoji
+	* (anything, which can be a reaction).
+	* If prepended by such an emoji, that emoji will be used for the reactions.
+	* If not prepended by any emoji, a random emoji from the Discord guild will
+	* be chosen instead.
+	*
+	* Voting time can be in any of the following formats:
+	* - [dd]d [HH]h [mm]m [ss]s,
+	* - [dd]:[HH]:[mm]:[ss],
+	* - number of seconds,
+	* where 0 <= [dd] < 7, 0 <= [HH] < 24, 0 <= [mm] < 60, 0 <= [ss] < 60.
+	* The last format may be any number of seconds greater than 0.
+	* In the second format, hours may be omitted.
+	* In the first format, any units may be omitted.
+	* The total time must be more than 0 seconds, and less than 7 days.
+	* 
+	* message - type Message, must be from a guild
+	* 
+	* returns - false on failure, true on success
+	*/
+
+	try {
+		// Parse the command
+		let command = message.cleanContent.split(";")
+		command[0] = command[0].substring(command[0].indexOf(" "))
+		let pollTimeout = parseTime(command[2])
+		let pollOptions = []
+		let pollOptionsFormatted = ""
+
+		let i = 0
+		command[1].split(".").forEach(option => {
+			// Format the poll options
+			option = option.replace(/\s/gim, " ").trim()
+
+			if (option != "") {
+				let reaction = text.other.pollReactions[i]
+				pollOptions.push({
+					reaction: reaction,
+					text: option,
+					count: 0
+				})
+
+				pollOptionsFormatted += `${reaction}: ${option}.\n`
+				
+				i += 1
+				
+			}
+
+		})
+
+		// Delete the command message
+		if (message.deletable) {
+			message.delete()
+
+		}
+
+		// Create the poll
+		message.channel.send(text.success.poll.created
+			.replace("{title}", command[0].trim())
+			.replace("{options}", pollOptionsFormatted)
+		).then(message => {
+			// Add the initial poll reactions
+			pollOptions.forEach(async option => {
+				await message.react(option.reaction)
+
+			})
+
+			// Await the reactions
+			return message.awaitReactions(
+				() => true,
+				{time: pollTimeout}
+			)
+		}).then(votes => {
+			// After the poll ends, tally up the votes
+			votes = Array.from(votes.values())
+			let results = ""
+			let totalCount = 0
+
+			votes.forEach(vote => {
+				// Count the votes
+				try {
+					pollOptions.find(option => {
+						return option.reaction === vote.emoji.name
+					}).count += vote.count - 1
+
+					totalCount += vote.count - 1
+					
+				} catch (error) {
+
+				}
+
+			})
+
+			pollOptions.forEach(option => {
+				// Calculate the percentage of votes each option got
+				let votePercentage
+
+				if (totalCount != 0) {
+					votePercentage = (option.count / totalCount) * 100
+					votePercentage = votePercentage.toFixed(0)
+
+				} else {
+					votePercentage = 0
+
+				}
+
+				// Format the poll result
+				if (option.count !== 1) {
+					results += `${votePercentage}% - ${option.text}.` +
+						` - ${option.count} votes.\n`
+
+				} else {
+					results += `${votePercentage}% - ${option.text}.` +
+						` - ${option.count} vote.\n`
+
+				}
+
+			})
+
+			// Send the poll result
+			message.channel.send(text.success.poll.finished
+				.replace("{title}", command[0].trim())
+				.replace("{results}", results.trim())
+			)
+
+		}).catch(() => {
+			message.channel.send(text.fail.poll)
+
+		})
+
+	} catch {
+		message.channel.send(text.fail.poll)
+
+	}
+
+}
+
 
 // Utility functions
 function rollDice(amount, sides) {
@@ -877,6 +1036,102 @@ function getGuildChannels(guild, type, name) {
 	channels.sort((a, b) => (a.rawPosition - b.rawPosition))
 
 	return channels
+}
+
+function parseTime(time) {
+	/*
+	* Parses time from the string [time]
+	*
+	* [time] can be in any of the following formats:
+	* - [dd]d [HH]h [mm]m [ss]s,
+	* - [dd]:[HH]:[mm]:[ss],
+	* - number of seconds,
+	* where 0 <= [dd] < 7, 0 <= [HH] < 24, 0 <= [mm] < 60, 0 <= [ss] < 60.
+	* The last format may be any number of seconds greater than 0.
+	* In the second format, hours may be omitted.
+	* In the first format, any units may be omitted.
+	* The total time must be more than 0 seconds, and less than 7 days.
+	*
+	* Throws SyntaxError, if [time] syntax is wrong.
+	* 
+	* time - type string, of the format described above
+	* 
+	* returns - The number of milliseconds in [time]
+	*/
+
+	// Pre-prepare time
+	time = (time || "").trim() || "10m"
+	let seconds = 0
+
+	if (time.includes(":")) {
+		// Format is [dd]:[HH]:[mm]:[ss]
+		try {
+			// Split the time into and array of ss, mm, HH, dd
+			time = time.split(":").reverse()
+
+			// Check if minutes and seconds are specified
+			if (time[0].trim() === "" || time[1].trim() === "") {
+				throw new SyntaxError("Time " + time + " is invalid.")
+			}
+
+			// Add all values to the return variable, seconds
+			seconds += parseInt(time[0], 10)
+			seconds += parseInt(time[1], 10) * 60
+			if (time[2] !== undefined) {
+				seconds += parseInt(time[2], 10) * 3600
+
+				if (time[3] !== undefined) {
+					seconds += parseInt(time[3], 10) * 86400
+	
+				}
+
+			}
+
+		} catch (error) {
+			throw new SyntaxError("Time " + time + " is invalid.")
+		}
+
+
+	} else if (/[dhms]/gi.test(time)) {
+		// Format is [dd]d [HH]h [mm]m [ss]s
+		time.split(" ").forEach(value => {
+			switch (value[value.length - 1]) {
+				case "s":
+					// Add seconds to the return variable
+					seconds += parseInt(value, 10)
+					break
+
+				case "m":
+					// Add minutes to the return variable
+					seconds += parseInt(value, 10) * 60
+					break
+
+				case "h":
+					// Add hours to the return variable
+					seconds += parseInt(value, 10) * 3600
+					break
+
+				case "d":
+					// Add days to the return variable
+					seconds += parseInt(value, 10) * 86400
+					break
+
+			}
+			
+		})
+
+	} else {
+		// Format is [number of seconds]
+		seconds = parseInt(time, 10)
+
+	}
+
+	// Make sure time is within limits
+	if (seconds < 1 || seconds > 604800 || isNaN(seconds)) {
+		throw new SyntaxError("Time " + time + " is invalid.")
+	}
+
+	return seconds * 1000
 }
 
 function logDeletedMessage(msg) {
